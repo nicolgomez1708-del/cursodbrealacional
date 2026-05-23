@@ -1,0 +1,49 @@
+INSERT INTO academia.profesores (
+    id_departamento,
+    nombre,
+    correo
+)
+VALUES (
+    999,
+    'Profesor Inválido',
+    'invalido@correo.com'
+);
+
+-- Resultado esperado:
+-- ERROR: insert or update on table "profesores"
+-- violates foreign key constraint
+
+DELETE FROM academia.departamentos
+WHERE id_departamento = 1;
+
+-- Resultado esperado:
+-- ERROR: update or delete on table "departamentos"
+-- violates foreign key constraint
+
+ALTER TABLE academia.profesores
+DROP CONSTRAINT profesores_id_departamento_fkey;
+
+ALTER TABLE academia.profesores
+ADD CONSTRAINT profesores_id_departamento_fkey
+FOREIGN KEY (id_departamento)
+REFERENCES academia.departamentos(id_departamento)
+ON DELETE CASCADE;
+
+DELETE FROM academia.departamentos
+WHERE id_departamento = 1;
+
+-- Resultado esperado:
+-- El departamento y todos los profesores asociados
+-- serán eliminados automáticamente.
+
+-- Explicación:
+-- PostgreSQL usa claves foráneas para mantener
+-- la integridad referencial entre tablas.
+--
+-- Esto evita:
+-- 1. Insertar registros relacionados con datos inexistentes.
+-- 2. Eliminar registros principales que aún tienen dependencias.
+--
+-- Riesgo de ON DELETE CASCADE:
+-- Puede eliminar múltiples registros automáticamente,
+-- provocando pérdida accidental de información.
