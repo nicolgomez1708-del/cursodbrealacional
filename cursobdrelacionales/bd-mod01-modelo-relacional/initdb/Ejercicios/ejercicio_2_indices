@@ -1,0 +1,36 @@
+EXPLAIN
+SELECT *
+FROM academia.profesores
+WHERE correo = 'profesor1@correo.com';
+
+CREATE INDEX idx_profesores_correo
+ON academia.profesores(correo);
+
+EXPLAIN
+SELECT *
+FROM academia.profesores
+WHERE correo = 'profesor1@correo.com';
+
+CREATE INDEX idx_departamentos_nombre
+ON academia.departamentos(nombre);
+
+EXPLAIN
+SELECT *
+FROM academia.departamentos
+WHERE nombre = 'Ingeniería';
+
+-- Comparación:
+-- Antes del índice:
+-- El motor realiza un recorrido completo de la tabla (Full Table Scan).
+
+-- Después del índice:
+-- El motor usa el índice para encontrar los datos más rápido,
+-- reduciendo tiempo y consumo de recursos.
+
+-- ¿En qué columnas conviene crear índices?
+-- Conviene crear índices en:
+-- 1. Columnas usadas frecuentemente en WHERE.
+-- 2. Columnas utilizadas en JOIN.
+-- 3. Columnas usadas en ORDER BY y GROUP BY.
+-- 4. Columnas con muchos valores diferentes (alta cardinalidad),
+--    como correos, identificaciones o códigos.
